@@ -1,23 +1,170 @@
 
 public class Notation extends java.lang.Object {
+	private static NotationQueue<String> nQueue;
+	private static NotationStack<String> nStack;
+	private final static String OPS = "+-*/";
 
-	public Notation() {
+	private static String stackTop() {
+		try {
+			return nStack.top();
+		} catch (StackUnderflowException e) {
+			e.getMessage();
+		}
+		return null;
 	}
 
-	public static double evaluatePostfixExpression(String postfixExpr) throws InvalidNotationFormatException {
-		double post = 0;
-		return post;
+	private static String stackPop() {
+		try {
+			return nStack.pop();
+		} catch (StackUnderflowException e) {
+			e.getMessage();
+		}
+		return null;
 	}
 
-	public static String convertPostfixToInfix(String postfix) throws InvalidNotationFormatException {
-
-		String name = "name";
-		return name;
+	private static boolean stackPush(String c) {
+		try {
+			return nStack.push(c);
+		} catch (StackOverflowException e) {
+			e.getMessage();
+		}
+		return false;
 	}
 
-	public static String convertInfixToPostfix(String infix) throws InvalidNotationFormatException {
+	private static boolean enqueue(String c) {
+		try {
+			return nQueue.enqueue(c);
+		} catch (QueueOverflowException e) {
+			e.getMessage();
+		}
+		return false;
+	}
 
-		String name = "name";
-		return name;
+	private static String dequeue() {
+		try {
+			return nQueue.dequeue();
+		} catch (QueueUnderflowException e) {
+			e.getMessage();
+		}
+		return null;
+	}
+
+	private static int calculatePrec(char c) {
+		if (c == '*' || c == '/') {
+			return 1;
+		} else if (c == '+' || c == '-') {
+			return 0;
+		}
+		return -1;
+	}
+
+	private static String applyOperator(String first, String second, char operator)
+			throws InvalidNotationFormatException {
+		double a = Double.parseDouble(first);
+		double b = Double.parseDouble(second);
+		switch (operator) {
+		case '+':
+			return Double.toString(a + b);
+		case '-':
+			return Double.toString(a - b);
+		case '*':
+			return Double.toString(a * b);
+		case '/':
+			if (b == 0)
+				throw new InvalidNotationFormatException();
+			return Double.toString(a / b);
+		}
+		return null;
+	}
+
+	public static String convertInfixToPostfix(String complexInfix) throws InvalidNotationFormatException {
+		nQueue = new NotationQueue<String>();
+		nStack = new NotationStack<String>();
+
+		for (int i = 0; i < complexInfix.length(); i++) {
+			char cur = complexInfix.charAt(i);
+			if (cur == ' ') {
+				continue;
+			} else if (Character.isDigit(cur)) {
+				enqueue(Character.toString(cur));
+			} else if (cur == '(') {
+				stackPush(Character.toString(cur));
+			} else if (OPS.indexOf(cur) >= 0) {
+				while (!nStack.isEmpty() && calculatePrec(stackTop().charAt(0)) >= calculatePrec(cur)) {
+					enqueue(stackPop());
+				}
+				stackPush(Character.toString(cur));
+			} else if (cur == ')') {
+				char top = stackPop().charAt(0);
+				while (top != '(') {
+					enqueue(Character.toString(top));
+					if (nStack.isEmpty()) {
+						throw new InvalidNotationFormatException();
+					} else {
+						top = stackPop().charAt(0);
+					}
+				}
+			}
+		}
+		while (!nStack.isEmpty()) {
+			enqueue(stackPop());
+		}
+		return nQueue.toString();
+	}
+
+	public static String convertPostfixToInfix(String complexPostfix) throws InvalidNotationFormatException {
+		nStack = new NotationStack<String>();
+		for (int i = 0; i < complexPostfix.length(); i++) {
+			char cur = complexPostfix.charAt(i);
+			if (cur == ' ') {
+				continue;
+			} else if (Character.isDigit(cur)) {
+				stackPush(Character.toString(cur));
+			} else if (OPS.indexOf(cur) >= 0) {
+				String a = stackPop().toString(), b, tmp;
+				if (nStack.isEmpty()) {
+					throw new InvalidNotationFormatException();
+				} else {
+					b = stackPop().toString();
+					tmp = '(' + b + cur + a + ')';
+					stackPush(tmp);
+				}
+			}
+		}
+		if (nStack.size() != 1) {
+			throw new InvalidNotationFormatException();
+		}
+		return stackPop();
+	}
+
+	public static double evaluatePostfixExpression(String complexPostfix) throws InvalidNotationFormatException {
+		nStack = new NotationStack<String>();
+		for (int i = 0; i < complexPostfix.length(); i++) {
+			char cur = complexPostfix.charAt(i);
+			if (cur == ' ') {
+				continue;
+			} else if (Character.isDigit(cur) || cur == '(') {
+				stackPush(Character.toString(cur));
+			} else if (OPS.indexOf(cur) >= 0) {
+				String a = stackPop().toString(), b;
+				String result;
+				if (nStack.isEmpty()) {
+					throw new InvalidNotationFormatException();
+				} else {
+					b = stackPop().toString();
+					result = applyOperator(b, a, cur);
+					stackPush(result);
+				}
+			}
+		}
+		if (nStack.size() != 1) {
+			throw new InvalidNotationFormatException();
+		}
+		return Double.parseDouble(stackPop());
+	}
+
+	public static double evaluateInfixExpression(String infixExpr) {
+		String postfixExpression = convertInfixToPostfix(infixExpr);
+		return evaluatePostfixExpression(postfixExpression);
 	}
 }

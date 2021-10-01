@@ -1,5 +1,5 @@
 public class StackOverflowException extends RuntimeException {
 	public StackOverflowException() {
-		// occurs when a top or pop method is called on an empty stack.
+		super("Push method has been called on a full stack");
 	}
 }

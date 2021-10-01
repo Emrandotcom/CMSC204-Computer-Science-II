@@ -14,6 +14,7 @@ public class NotationStackTest {
 	// STUDENT: student tests will use the doubleS
 	public NotationStack<Double> doubleS;
 	// STUDENT: add variables as needed for your student tests
+	public Double one = 1.0, two = 2.0, three = 3.0, four = 4.0, five = 5.0, six = 6.0;
 
 	@Before
 	public void setUp() throws Exception {
@@ -23,6 +24,10 @@ public class NotationStackTest {
 		stringS.push(c);
 
 		// STUDENT: add setup for doubleS for student tests
+		doubleS = new NotationStack<Double>(6);
+		doubleS.push(one);
+		doubleS.push(two);
+		doubleS.push(three);
 	}
 
 	@After
@@ -66,8 +71,18 @@ public class NotationStackTest {
 
 	@Test
 	public void testPopStudent() {
-		// Use the doubleQ for student tests
-		fail("Not yet implemented");
+		try {
+			assertEquals(one, doubleS.pop());
+			assertEquals(two, doubleS.pop());
+			assertEquals(three, doubleS.pop());
+			// Queue is empty, next statement should cause QueueUnderFlowException
+			doubleS.pop();
+			assertTrue("This should have caused a StackUnderflowException", false);
+		} catch (StackUnderflowException e) {
+			assertTrue("This should have caused a StackUnderflowException", true);
+		} catch (Exception e) {
+			assertTrue("This should have caused a StackUnderflowException", false);
+		}
 	}
 
 	@Test
@@ -110,8 +125,20 @@ public class NotationStackTest {
 
 	@Test
 	public void testPushStudent() {
-		// Use the doubleQ for student tests
-		fail("Not yet implemented");
+		try {
+			assertEquals(3, doubleS.size());
+			assertEquals(true, doubleS.push(four));
+			assertEquals(4, doubleS.size());
+			assertEquals(true, doubleS.push(five));
+			assertEquals(5, doubleS.size());
+			// Queue is full, next statement should cause QueueOverFlowException
+			doubleS.push(six);
+			assertTrue("This should have caused a StackOverflowException", false);
+		} catch (StackOverflowException e) {
+			assertTrue("This should have caused a StackOverflowException", true);
+		} catch (Exception e) {
+			assertTrue("This should have caused a StackOverflowException", false);
+		}
 	}
 
 	@Test
@@ -125,8 +152,11 @@ public class NotationStackTest {
 
 	@Test
 	public void testToStringStudent() {
-		// Use the doubleQ for student tests
-		fail("Not yet implemented");
+		assertEquals("1.02.03.0", doubleS.toString());
+		doubleS.push(four);
+		assertEquals("1.02.03.04.0", doubleS.toString());
+		doubleS.push(five);
+		assertEquals("1.02.03.04.05.0", doubleS.toString());
 	}
 
 	@Test
