@@ -1,3 +1,8 @@
+
+/**
+@author Emran Abbamacha
+ */
+
 import java.util.ArrayList;
 
 public class GradeBook {
@@ -12,21 +17,7 @@ public class GradeBook {
 	public GradeBook(int capacity) {
 		scores = new double[capacity];
 		scoresSize = 0;
-	}
-
-	public int getScoreSize() {
-		return scoresSize;
-	}
-
-	public String toString() {
-		String scoresString = "";
-
-		for (int i = 0; i < scoresSize; i++) {
-			scoresString += scores[i] + " ";
-		}
-
-		return scoresString.trim();
-	}
+	} // end GradeBook
 
 	/**
 	 * Adds a score to this gradebook.
@@ -41,7 +32,7 @@ public class GradeBook {
 			return true;
 		} else
 			return false;
-	}
+	} // end addScore
 
 	/**
 	 * Computes the sum of the scores in this gradebook.
@@ -54,7 +45,7 @@ public class GradeBook {
 			total = total + scores[i];
 		}
 		return total;
-	}
+	} // end sum
 
 	/**
 	 * Gets the minimum score in this gradebook.
@@ -62,16 +53,20 @@ public class GradeBook {
 	 * @return the minimum score, or 0 if there are no scores.
 	 */
 	public double minimum() {
-		if (scoresSize == 0)
+		double smallest = -99;
+
+		if (scoresSize == 0) {
 			return 0;
-		double smallest = scores[0];
-		for (int i = 1; i < scoresSize; i++) {
-			if (scores[i] < smallest) {
-				smallest = scores[i];
+		} else {
+			for (int i = 1; i < scoresSize; i++) {
+				if (scores[i] < smallest) {
+					smallest = scores[i];
+				}
 			}
 		}
+
 		return smallest;
-	}
+	} // end minimum
 
 	/**
 	 * Gets the final score for this gradebook.
@@ -86,5 +81,28 @@ public class GradeBook {
 			return scores[0];
 		else
 			return sum() - minimum();
-	}
-}
+	} // end finalScore
+
+	/**
+	 * Gets the size of scores for this gradebook.
+	 * 
+	 * @return the size of the scores
+	 */
+	public int getScoresSize() {
+		return scoresSize;
+	} // end getScoresSize
+
+	/**
+	 * Print each score as a string with a space in between.
+	 * 
+	 * @return a string with each score in scores separated by space
+	 */
+	public String toString() {
+		String scoreString = "";
+		for (int i = 0; i < scoresSize; i++) {
+			scoreString += scores[i] + " ";
+		}
+		return scoreString.trim();
+	} // end toString
+
+} // end GradeBook class
