@@ -1,3 +1,7 @@
+
+/**
+@author Emran Abbamacha
+ */
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterEach;
@@ -5,11 +9,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GradebookTester {
+
 	private GradeBook gradeBook1;
 	private GradeBook gradeBook2;
 
 	@BeforeEach
 	void setUp() throws Exception {
+
 		gradeBook1 = new GradeBook(3);
 		gradeBook2 = new GradeBook(4);
 
@@ -21,13 +27,16 @@ class GradebookTester {
 		gradeBook2.addScore(80.0);
 		gradeBook2.addScore(90.0);
 		gradeBook2.addScore(100.0);
-	}
+
+	} // end setUp
 
 	@AfterEach
 	void tearDown() throws Exception {
+
 		gradeBook1 = null;
 		gradeBook2 = null;
-	}
+
+	} // end tearDown
 
 	@Test
 	void testAddScore() {
@@ -39,19 +48,20 @@ class GradebookTester {
 		String actualResultsBook2 = gradeBook2.toString();
 
 		int expectedBookSize1 = 3;
-		int actualBookSize1 = gradeBook1.getScoreSize();
+		int actualBookSize1 = gradeBook1.getScoresSize();
 		int expectedBookSize2 = 4;
-		int actualBookSize2 = gradeBook2.getScoreSize();
+		int actualBookSize2 = gradeBook2.getScoresSize();
 
 		assertTrue(expectedResultsBook1.equals(actualResultsBook1));
 		assertTrue(expectedResultsBook2.equals(actualResultsBook2));
 		assertTrue(expectedBookSize1 == actualBookSize1);
 		assertTrue(expectedBookSize2 == actualBookSize2);
 
-	}
+	} // end testAddScore
 
 	@Test
 	void testSum() {
+
 		double expectedSumBook1 = 225.0;
 		double actualSum1 = gradeBook1.sum();
 
@@ -60,19 +70,16 @@ class GradebookTester {
 
 		assertTrue(expectedSumBook1 == actualSum1);
 		assertTrue(expectedSumBook2 == actualSum2);
-	}
+
+	} // end testSum
 
 	@Test
 	void testMinimum() {
-		double expectedMinBook1 = 65.0;
-		double actualMinBook1 = gradeBook1.minimum();
 
-		double expectedMinBook2 = 70.0;
-		double actualMinBook2 = gradeBook2.minimum();
+		assertEquals(65.0, gradeBook1.minimum(), .001);
+		assertEquals(70.0, gradeBook2.minimum(), .001);
 
-		assertTrue(expectedMinBook1 == actualMinBook1);
-		assertTrue(expectedMinBook2 == actualMinBook2);
-	}
+	} // end testMinimum
 
 	@Test
 	void testFinalScore() {
@@ -86,6 +93,6 @@ class GradebookTester {
 		assertTrue(expectedFinal1 == actualFinalBook1);
 		assertTrue(expectedFinal2 == actualFinalBook2);
 
-	}
+	} // end testFinalScore
 
-}
+} // end GradebookTester class
