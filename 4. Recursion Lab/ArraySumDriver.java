@@ -43,6 +43,6 @@ public class ArraySumDriver {
 			return sumOfArray(arr, num - 1) + arr[num];
 		}
 
-	} // end sumOfArray
+	} // end sumOfArray 
 
 } // end ArraySumDriver class
